@@ -1,3 +1,4 @@
+const rateLimiter = require('./rateLimiter');
 const express = require('express');
 const router = express.Router();
 const { generateSnowflakeId, toBase62 } = require('./snowflake');
@@ -29,7 +30,7 @@ router.post('/login', async (req, res) => {
 });
 
 // POST /shorten — create a short URL
-router.post('/shorten', async (req, res) => {
+router.post('/shorten', rateLimiter, async (req, res) => {
   const { originalUrl } = req.body;
   if (!originalUrl) return res.status(400).json({ error: 'URL required' 
 });
